@@ -1,3 +1,1 @@
-from . import zenpacklib
-
-CFG = zenpacklib.load_yaml()
+__import__('pkg_resources').declare_namespace(__name__)

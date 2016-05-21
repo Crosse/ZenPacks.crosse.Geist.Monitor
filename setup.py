@@ -2,12 +2,12 @@
 # These variables are overwritten by Zenoss when the ZenPack is exported
 # or saved.  Do not modify them directly here.
 # NB: PACKAGES is deprecated
-NAME = "ZenPacks.crosse.Geist"
+NAME = "ZenPacks.crosse.Geist.Monitor"
 VERSION = "1.0.0dev"
 AUTHOR = "Your Name Here"
 LICENSE = ""
-NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.crosse']
-PACKAGES = ['ZenPacks', 'ZenPacks.crosse', 'ZenPacks.crosse.Geist']
+NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.crosse', 'ZenPacks.crosse.Geist']
+PACKAGES = ['ZenPacks', 'ZenPacks.crosse', 'ZenPacks.crosse.Geist', 'ZenPacks.crosse.Geist.Monitor']
 INSTALL_REQUIRES = []
 COMPAT_ZENOSS_VERS = ""
 PREV_ZENPACK_NAME = ""

@@ -1,4 +1,4 @@
-name: ZenPacks.crosse.Geist
+name: ZenPacks.crosse.Geist.Monitor
 
 classes:
     GeistDevice:
@@ -44,18 +44,18 @@ class_relationships:
 device_classes:
     /Environment/Geist:
         zProperties:
-            zPythonClass: ZenPacks.crosse.Geist.GeistDevice
+            zPythonClass: ZenPacks.crosse.Geist.Monitor.GeistDevice
             zSnmpMonitorIgnore: false
             zSnmpVer: 1
             zCollectorPlugins:
-                - crosse.snmp.Geist
+                - crosse.snmp.Geist.Monitor
                 - zenoss.snmp.NewDeviceMap
                 - zenoss.snmp.DeviceMap
                 - zenoss.snmp.InterfaceMap
 
         templates:
             ClimateSensor:
-                targetPythonClass: ZenPacks.crosse.Geist.GeistClimateSensor
+                targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistClimateSensor
                 description: Geist Climate Sensor monitoring.
 
                 datasources:

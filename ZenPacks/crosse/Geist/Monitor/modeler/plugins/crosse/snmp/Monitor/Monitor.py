@@ -3,9 +3,9 @@ from Products.DataCollector.plugins.CollectorPlugin import (
         )
 
 
-class Geist(SnmpPlugin):
+class Monitor(SnmpPlugin):
     relname = 'geistClimateSensors'
-    modname = 'ZenPacks.crosse.Geist.GeistClimateSensor'
+    modname = 'ZenPacks.crosse.Geist.Monitor.GeistClimateSensor'
 
     snmpGetMap = (
             GetMap({
