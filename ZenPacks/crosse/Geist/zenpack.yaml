@@ -1,1 +1,81 @@
 name: ZenPacks.crosse.Geist
+
+classes:
+    GeistDevice:
+        base: [zenpacklib.Device]
+        label: Geist
+        properties:
+            product_title:
+                type: string
+            product_version:
+                type: string
+            friendly_name:
+                type: string
+            sensor_count:
+                type: int
+
+    GeistClimateSensor:
+        base: [zenpacklib.Component]
+        label: Climate Sensor
+        properties:
+            serial:
+                label: Serial Number
+                content_width: 110
+                order: 1
+            temperature:
+                label: Temperature (°C)
+                order: 2
+            ioPort1:
+                label: IO Port 1
+                order: 3
+            ioPort2:
+                label: IO Port 2
+                order: 4
+            ioPort3:
+                label: IO Port 3
+                order: 5
+
+
+
+class_relationships:
+    #- GeistDevice(geistClimateSensors) 1:MC (geist)GeistClimateSensor
+    - GeistDevice 1:MC GeistClimateSensor
+
+device_classes:
+    /Environment/Geist:
+        zProperties:
+            zPythonClass: ZenPacks.crosse.Geist.GeistDevice
+            zSnmpMonitorIgnore: false
+            zSnmpVer: 1
+            zCollectorPlugins:
+                - crosse.snmp.Geist
+                - zenoss.snmp.NewDeviceMap
+                - zenoss.snmp.DeviceMap
+                - zenoss.snmp.InterfaceMap
+
+        templates:
+            ClimateSensor:
+                targetPythonClass: ZenPacks.crosse.Geist.GeistClimateSensor
+                description: Geist Climate Sensor monitoring.
+
+                datasources:
+                    temperature:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.5
+                        component: "${here/id}"
+                        datapoints:
+                            temperature:
+                                rrdtype: GAUGE
+                                rrdmin: -40
+                                rrdmax: 123
+                graphs:
+                    Temperature:
+                        units: degrees Celsius
+                        miny: -40
+                        maxy: 123
+
+                        graphpoints:
+                            Temperature:
+                                dpName: temperature_temperature
+                                format: "%6.2f°C"
+
