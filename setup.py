@@ -4,8 +4,8 @@
 # NB: PACKAGES is deprecated
 NAME = "ZenPacks.crosse.Geist.Monitor"
 VERSION = "1.0.0dev"
-AUTHOR = "Your Name Here"
-LICENSE = ""
+AUTHOR = "Seth Wright"
+LICENSE = "MIT"
 NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.crosse', 'ZenPacks.crosse.Geist']
 PACKAGES = ['ZenPacks', 'ZenPacks.crosse', 'ZenPacks.crosse.Geist', 'ZenPacks.crosse.Geist.Monitor']
 INSTALL_REQUIRES = []
