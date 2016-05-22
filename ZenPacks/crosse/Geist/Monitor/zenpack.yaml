@@ -66,14 +66,9 @@ device_classes:
                         datapoints:
                             temperature:
                                 rrdtype: GAUGE
-                                rrdmin: -40
-                                rrdmax: 123
                 graphs:
                     Temperature:
                         units: degrees Celsius
-                        miny: -40
-                        maxy: 123
-
                         graphpoints:
                             Temperature:
                                 dpName: temperature_temperature
