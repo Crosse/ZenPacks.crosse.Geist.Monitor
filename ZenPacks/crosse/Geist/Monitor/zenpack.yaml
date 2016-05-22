@@ -1,9 +1,9 @@
 name: ZenPacks.crosse.Geist.Monitor
 
 classes:
-    GeistDevice:
+    GeistMonitorDevice:
         base: [zenpacklib.Device]
-        label: Geist
+        label: GeistMonitor
         properties:
             product_title:
                 type: string
@@ -39,12 +39,12 @@ classes:
 
 class_relationships:
     #- GeistDevice(geistClimateSensors) 1:MC (geist)GeistClimateSensor
-    - GeistDevice 1:MC GeistClimateSensor
+    - GeistMonitorDevice 1:MC GeistClimateSensor
 
 device_classes:
     /Environment/Geist:
         zProperties:
-            zPythonClass: ZenPacks.crosse.Geist.Monitor.GeistDevice
+            zPythonClass: ZenPacks.crosse.Geist.Monitor.GeistMonitorDevice
             zSnmpMonitorIgnore: false
             zSnmpVer: 1
             zCollectorPlugins:
