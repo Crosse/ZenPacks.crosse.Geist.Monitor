@@ -24,6 +24,7 @@ classes:
                 order: 1
             temperature:
                 label: Temperature (°C)
+                type: float
                 order: 2
             ioPort1:
                 label: IO Port 1
