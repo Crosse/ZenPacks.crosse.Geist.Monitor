@@ -28,12 +28,15 @@ classes:
                 order: 2
             ioPort1:
                 label: IO Port 1
+                type: int
                 order: 3
             ioPort2:
                 label: IO Port 2
+                type: int
                 order: 4
             ioPort3:
                 label: IO Port 3
+                type: int
                 order: 5
 
 
@@ -67,6 +70,28 @@ device_classes:
                         datapoints:
                             temperature:
                                 rrdtype: GAUGE
+                    io1:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.10
+                        component: "${here/id}"
+                        datapoints:
+                            io1:
+                                rrdtype: GAUGE
+                    io2:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.11
+                        component: "${here/id}"
+                        datapoints:
+                            io1:
+                                rrdtype: GAUGE
+                    io3:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.12
+                        component: "${here/id}"
+                        datapoints:
+                            io1:
+                                rrdtype: GAUGE
+
                 graphs:
                     Temperature:
                         units: degrees Celsius
@@ -75,3 +100,14 @@ device_classes:
                                 dpName: temperature_temperature
                                 format: "%6.2lf°C"
 
+                    IO Ports:
+                        graphpoints:
+                            IO1:
+                                dpName: io1_io1
+                                format: "%5.2lf"
+                            IO2:
+                                dpName: io2_io2
+                                format: "%5.2lf"
+                            IO3:
+                                dpName: io3_io3
+                                format: "%5.2lf"
