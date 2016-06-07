@@ -68,29 +68,25 @@ device_classes:
                         oid: 1.3.6.1.4.1.21239.1.2.1.5
                         component: "${here/id}"
                         datapoints:
-                            temperature:
-                                rrdtype: GAUGE
+                            temperature: GAUGE
                     io1:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.10
                         component: "${here/id}"
                         datapoints:
-                            io1:
-                                rrdtype: GAUGE
+                            io1: GAUGE
                     io2:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.11
                         component: "${here/id}"
                         datapoints:
-                            io1:
-                                rrdtype: GAUGE
+                            io2: GAUGE
                     io3:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.12
                         component: "${here/id}"
                         datapoints:
-                            io1:
-                                rrdtype: GAUGE
+                            io3: GAUGE
 
                 graphs:
                     Temperature:
