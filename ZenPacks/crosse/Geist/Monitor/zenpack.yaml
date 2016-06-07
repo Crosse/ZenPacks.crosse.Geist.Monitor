@@ -91,12 +91,16 @@ device_classes:
                 graphs:
                     Temperature:
                         units: degrees Celsius
+                        height: 100
+                        width: 500
                         graphpoints:
                             Temperature:
                                 dpName: temperature_temperature
                                 format: "%6.2lf°C"
 
                     IO Ports:
+                        height: 100
+                        width: 500
                         graphpoints:
                             IO1:
                                 dpName: io1_io1
