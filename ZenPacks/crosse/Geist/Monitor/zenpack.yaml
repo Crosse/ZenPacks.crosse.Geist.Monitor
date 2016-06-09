@@ -108,18 +108,18 @@ classes:
             DEFAULTS:
                 type: int
 
-            tempSensorSerial:
+            airFlowSensorSerial:
                 label: Serial Number
                 type: string
                 content_width: 110
                 order: 1
-            tempSensorAvail:
+            airFlowSensorAvail:
                 label: Connected
                 type: boolean
                 renderer: Zenoss.render.checkbox
                 order: 2
                 datapoint: airFlowSensorAvail_airFlowSensorAvail
-            tempSensorTempC:
+            airFlowSensorTempC:
                 label: Temperature
                 short_label: Temp
                 order: 3
