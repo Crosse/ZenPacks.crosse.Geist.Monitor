@@ -49,6 +49,13 @@ class Monitor(SnmpPlugin):
                     '.4': 'climateAvail',
                     }
                 ),
+            GetTableMap(
+                'tempSensorTable', '1.3.6.1.4.1.21239.1.4.1', {
+                    '.2': 'tempSensorSerial',
+                    '.3': 'tempSensorName',
+                    '.4': 'tempSensorAvail',
+                    }
+                ),
             )
 
     def process(self, device, results, log):
@@ -89,6 +96,29 @@ class Monitor(SnmpPlugin):
 
             rm.append(ObjectMap(
                 modname='ZenPacks.crosse.Geist.Monitor.GeistClimateSensor',
+                data=values
+                ))
+        maps.append(rm)
+
+        # Components: temperature sensors
+        rm = RelationshipMap(
+                relname='geistTemperatureSensors',
+                modname='ZenPacks.crosse.Geist.Monitor.GeistTemperatureSensor',
+                )
+        for snmpindex, row in tabledata.get('tempSensorTable', {}).items():
+            serial = row.get('tempSensorSerial')
+            if not serial:
+                log.warn('Skipping temperature sensor with no serial')
+                continue
+            log.debug('Modeling temperature sensor %s', serial)
+            
+            values = {k: row[k] for k in row}
+            values['id'] = self.prepId(serial)
+            values['title'] = values['tempSensorName']
+            values['snmpindex'] = snmpindex.strip('.')
+
+            rm.append(ObjectMap(
+                modname='ZenPacks.crosse.Geist.Monitor.GeistTemperatureSensor',
                 data=values
                 ))
         maps.append(rm)

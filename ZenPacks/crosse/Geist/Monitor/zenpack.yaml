@@ -48,6 +48,11 @@ classes:
                 order: 4
                 datapoint: climateIO3_climateIO3
 
+    GeistTemperatureSensor:
+        base: [zenpacklib.Component]
+        label: Temperature Sensor
+        properties:
+            DEFAULTS:
                 type: int
 
             tempSensorSerial:
@@ -70,6 +75,7 @@ classes:
 
 class_relationships:
     - GeistMonitorDevice(geistClimateSensors) 1:MC (geistMonitorDevice)GeistClimateSensor
+    - GeistMonitorDevice(geistTemperatureSensors) 1:MC (geistMonitorDevice)GeistTemperatureSensor
 
 device_classes:
     /Environment/Geist:
@@ -185,3 +191,35 @@ device_classes:
                             IO3:
                                 dpName: climateIO3_climateIO3
                                 format: "%6.2lf"
+
+            TemperatureSensor:
+                targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistTemperatureSensor
+                description: Temperature Sensors
+
+                datasources:
+                    tempSensorAvail:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.4.1.4
+                        component: "${here/id}"
+                        datapoints:
+                            tempSensorAvail:
+                                rrdtype: GAUGE
+                                description: Is device currently plugged in?
+                    tempSensorTempC:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.4.1.5
+                        datapoints:
+                            tempSensorTempC:
+                                rrdtype: GAUGE
+                                description: Temperature in Celsius
+
+                graphs:
+                    Temperature:
+                        units: degrees Celsius
+                        height: 100
+                        width: 500
+                        graphpoints:
+                            Temperature:
+                                dpName: tempSensorTempC_tempSensorTempC
+                                format: "%6.2lf°C"
+
