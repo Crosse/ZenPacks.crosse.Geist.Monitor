@@ -12,6 +12,7 @@ classes:
     GeistClimateSensor:
         base: [zenpacklib.Component]
         label: Climate Sensor
+        order: 1
         properties:
             DEFAULTS:
                 type: int
@@ -51,6 +52,7 @@ classes:
     GeistTemperatureSensor:
         base: [zenpacklib.Component]
         label: Temperature Sensor
+        order: 2
         properties:
             DEFAULTS:
                 type: int
@@ -75,6 +77,7 @@ classes:
     GeistAirflowSensor:
         base: [zenpacklib.Component]
         label: Airflow Sensor
+        order: 3
         properties:
             DEFAULTS:
                 type: int
