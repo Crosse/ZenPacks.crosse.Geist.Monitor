@@ -8,6 +8,8 @@ classes:
             sensor_count:
                 label: Sensor Count
                 type: int
+            productUrl:
+              label: Web Administration
 
     GeistClimateSensor:
         base: [zenpacklib.Component]

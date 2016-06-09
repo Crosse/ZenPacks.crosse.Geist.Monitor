@@ -80,6 +80,7 @@ class Monitor(SnmpPlugin):
         maps.append(ObjectMap(data={
             'sensor_count': sensor_count,
             'title': getdata['productFriendlyName'],
+            'productUrl': getdata['productUrl'],
             'setHWProductKey': MultiArgs(getdata['productHardware'], manufacturer),
             'setOSProductKey': MultiArgs(os_name, manufacturer),
             }))
