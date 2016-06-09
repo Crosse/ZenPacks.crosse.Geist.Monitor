@@ -85,9 +85,6 @@ device_classes:
             zSnmpVer: 1
             zCollectorPlugins:
                 - crosse.snmp.Geist.Monitor
-                - zenoss.snmp.NewDeviceMap
-                - zenoss.snmp.DeviceMap
-                - zenoss.snmp.InterfaceMap
 
         templates:
             ClimateSensor:
