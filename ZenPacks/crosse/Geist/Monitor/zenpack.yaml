@@ -3,15 +3,10 @@ name: ZenPacks.crosse.Geist.Monitor
 classes:
     GeistMonitorDevice:
         base: [zenpacklib.Device]
-        label: GeistMonitor
+        label: Geist Monitor
         properties:
-            product_title:
-                type: string
-            product_version:
-                type: string
-            friendly_name:
-                type: string
             sensor_count:
+                label: Sensor Count
                 type: int
 
     GeistClimateSensor:
