@@ -87,6 +87,18 @@ device_classes:
                 - crosse.snmp.Geist.Monitor
 
         templates:
+            Device:
+                targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistMonitorDevice
+                description: Collects sysUpTime
+
+                datasources:
+                    sysUpTime:
+                        type: SNMP
+                        oid: .1.3.6.1.2.1.1.3.0
+                        datapoints:
+                            sysUpTime: GAUGE
+
+
             ClimateSensor:
                 targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistClimateSensor
                 description: Climate sensors (internal sensors for RacSense units)
