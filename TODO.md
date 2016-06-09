@@ -20,8 +20,6 @@
   * climatePowerFactorC
 * Implement the following components:
   * PowerMonitor (powerMonitorTable)
-  * TemperatureSensor (tempSensorTable)
-  * AirflowSensor (airFlowSensorTable)
   * PowerOnlySensor (powerOnlyTable) (name?)
   * DoorSensor (doorSensorTable)
   * WaterSensor (waterSensorTable)
