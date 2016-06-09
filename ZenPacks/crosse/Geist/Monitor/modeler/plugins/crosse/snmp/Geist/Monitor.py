@@ -152,6 +152,5 @@ class Monitor(SnmpPlugin):
                 data=values
                 ))
         maps.append(rm)
-        import pdb; pdb.set_trace()
 
         return maps
