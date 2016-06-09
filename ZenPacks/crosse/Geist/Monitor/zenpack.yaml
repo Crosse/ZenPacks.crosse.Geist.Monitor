@@ -35,20 +35,32 @@ classes:
                 short_label: Temp
                 order: 3
                 datapoint: climateTempC_climateTempC
+            climateTempCThreshHigh:
+                type: float
+                label: Max Threshold
+                order: 4
+                grid_display: false
+                editable: true
+            climateTempCThreshLow:
+                type: float
+                label: Min Threshold
+                order: 5
+                grid_display: false
+                editable: true
             climateIO1:
                 label: IO Port 1
                 short_label: IO1
-                order: 4
+                order: 6
                 datapoint: climateIO1_climateIO1
             climateIO2:
                 label: IO Port 2
                 short_label: IO2
-                order: 4
+                order: 7
                 datapoint: climateIO2_climateIO2
             climateIO3:
                 label: IO Port 3
                 short_label: IO3
-                order: 4
+                order: 8
                 datapoint: climateIO3_climateIO3
 
     GeistTemperatureSensor:
@@ -75,6 +87,18 @@ classes:
                 short_label: Temp
                 order: 3
                 datapoint: tempSensorTempC_tempSensorTempC
+            tempSensorTempCThreshHigh:
+                type: float
+                label: Max Threshold (Celsius)
+                order: 4
+                grid_display: false
+                editable: true
+            tempSensorTempCThreshLow:
+                type: float
+                label: Min Threshold (Celsius)
+                order: 5
+                grid_display: false
+                editable: true
 
     GeistAirflowSensor:
         base: [zenpacklib.Component]
@@ -100,6 +124,50 @@ classes:
                 short_label: Temp
                 order: 3
                 datapoint: airFlowSensorTempC_airFlowSensorTempC
+            airFlowSensorTempCThreshHigh:
+                type: float
+                label: Max Threshold (Celsius)
+                order: 4
+                grid_display: false
+                editable: true
+            airFlowSensorTempCThreshLow:
+                type: float
+                label: Min Threshold (Celsius)
+                order: 5
+                grid_display: false
+                editable: true
+            airFlowSensorHumidity:
+                label: Humidity
+                order: 6
+                datapoint: airFlowSensorHumidity_airFlowSensorHumidity
+            airFlowSensorHumidityCThreshHigh:
+                type: float
+                label: Max Threshold (0-100)
+                order: 4
+                grid_display: false
+                editable: true
+            airFlowSensorHumidityCThreshLow:
+                type: float
+                label: Min Threshold (0-100)
+                order: 5
+                grid_display: false
+                editable: true
+            airFlowSensorFlow:
+                label: AirFlow
+                order: 6
+                datapoint: airFlowSensorFlow_airFlowSensorFlow
+            airFlowSensorFlowCThreshHigh:
+                type: float
+                label: Max Threshold (0-100)
+                order: 4
+                grid_display: false
+                editable: true
+            airFlowSensorFlowCThreshLow:
+                type: float
+                label: Min Threshold (0-100)
+                order: 5
+                grid_display: false
+                editable: true
 
 
 class_relationships:
@@ -207,6 +275,32 @@ device_classes:
                                 rrdtype: GAUGE
                                 description: Current reading for Analog Input 3
 
+                thresholds:
+                    Sensor Connected:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - climateAvail_climateAvail
+                        eventClass: /Status
+                        severity: 4
+                        minval: 1
+                    High Temperature:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - climateTempC_climateTempC
+                        eventClass: /Environ
+                        severity: 4
+                        maxval: here.climateTempCThreshHigh
+                    Low Temperature:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - climateTempC_climateTempC
+                        eventClass: /Environ
+                        severity: 4
+                        minval: here.climateTempCThreshLow
+
                 graphs:
                     Temperature:
                         units: degrees Celsius
@@ -216,6 +310,7 @@ device_classes:
                             Temperature:
                                 dpName: climateTempC_climateTempC
                                 format: "%6.2lf°C"
+                                includeThresholds: true
 
                     IO Ports:
                         height: 100
@@ -230,6 +325,7 @@ device_classes:
                             IO3:
                                 dpName: climateIO3_climateIO3
                                 format: "%6.2lf"
+
 
             TemperatureSensor:
                 targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistTemperatureSensor
@@ -252,6 +348,32 @@ device_classes:
                                 rrdtype: GAUGE
                                 description: Temperature in Celsius
 
+                thresholds:
+                    Sensor Connected:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - tempSensorAvail_tempSensorAvail
+                        eventClass: /Status
+                        severity: 4
+                        minval: 1
+                    High Temperature:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - tempSensorTempC_tempSensorTempC
+                        eventClass: /Environ
+                        severity: 4
+                        maxval: here.tempSensorTempCThreshHigh
+                    Low Temperature:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - tempSensorTempC_tempSensorTempC
+                        eventClass: /Environ
+                        severity: 4
+                        minval: here.tempSensorTempCThreshLow
+
                 graphs:
                     Temperature:
                         units: degrees Celsius
@@ -261,6 +383,7 @@ device_classes:
                             Temperature:
                                 dpName: tempSensorTempC_tempSensorTempC
                                 format: "%6.2lf°C"
+                                includeThresholds: true
 
 
             AirflowSensor:
@@ -298,6 +421,64 @@ device_classes:
                                 rrdtype: GAUGE
                                 description: Humidity reading
 
+                thresholds:
+                    Sensor Connected:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorAvail_airFlowSensorAvail
+                        eventClass: /Status
+                        severity: 4
+                        minval: 1
+                    High Temperature:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorTempC_airFlowSensorTempC
+                        eventClass: /Environ
+                        severity: 4
+                        maxval: here.airFlowSensorTempCThreshHigh
+                    Low Temperature:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorTempC_airFlowSensorTempC
+                        eventClass: /Environ
+                        severity: 4
+                        minval: here.airFlowSensorTempCThreshLow
+                    High Humidity:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorHumidity_airFlowSensorHumidity
+                        eventClass: /Environ
+                        severity: 4
+                        maxval: here.airFlowSensorHumidityThreshHigh
+                    Low Humidity:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorHumidity_airFlowSensorHumidity
+                        eventClass: /Environ
+                        severity: 4
+                        minval: here.airFlowSensorHumidityThreshLow
+                    High AirFlow:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorFlow_airFlowSensorFlow
+                        eventClass: /Environ
+                        severity: 4
+                        maxval: here.airFlowSensorFlowThreshHigh
+                    Low AirFlow:
+                        type: MinMaxThreshold
+                        enabled: true
+                        dsnames:
+                            - airFlowSensorFlow_airFlowSensorFlow
+                        eventClass: /Environ
+                        severity: 4
+                        minval: here.airFlowSensorFlowThreshLow
+
                 graphs:
                     Temperature:
                         units: degrees Celsius
@@ -307,13 +488,15 @@ device_classes:
                             Temperature:
                                 dpName: airFlowSensorTempC_airFlowSensorTempC
                                 format: "%6.2lf°C"
-                    Airflow:
+                                includeThresholds: true
+                    Air Flow:
                         height: 100
                         width: 500
                         graphpoints:
                             Airflow:
                                 dpName: airFlowSensorFlow_airFlowSensorFlow
                                 format: "%6.2lf"
+                                includeThresholds: true
                     Humidity:
                         units: percent
                         height: 100
@@ -322,3 +505,4 @@ device_classes:
                             Humidity:
                                 dpName: airFlowSensorHumidity_airFlowSensorHumidity
                                 format: "%6.2lf"
+                                includeThresholds: true
