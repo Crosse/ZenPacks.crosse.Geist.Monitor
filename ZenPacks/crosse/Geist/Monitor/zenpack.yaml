@@ -13,32 +13,63 @@ classes:
         base: [zenpacklib.Component]
         label: Climate Sensor
         properties:
-            serial:
+            DEFAULTS:
+                type: int
+
+            climateSerial:
                 label: Serial Number
+                type: string
                 content_width: 110
                 order: 1
-            temperature:
-                label: Temperature (°C)
-                type: float
+            climateAvail:
+                label: Connected
+                type: boolean
+                renderer: Zenoss.render.checkbox
                 order: 2
-            ioPort1:
-                label: IO Port 1
-                type: int
+                datapoint: climateAvail_climateAvail
+            climateTempC:
+                label: Temperature
+                short_label: Temp
                 order: 3
-            ioPort2:
-                label: IO Port 2
-                type: int
+                datapoint: climateTempC_climateTempC
+            climateIO1:
+                label: IO Port 1
+                short_label: IO1
                 order: 4
-            ioPort3:
+                datapoint: climateIO1_climateIO1
+            climateIO2:
+                label: IO Port 2
+                short_label: IO2
+                order: 4
+                datapoint: climateIO2_climateIO2
+            climateIO3:
                 label: IO Port 3
-                type: int
-                order: 5
+                short_label: IO3
+                order: 4
+                datapoint: climateIO3_climateIO3
 
+                type: int
+
+            tempSensorSerial:
+                label: Serial Number
+                type: string
+                content_width: 110
+                order: 1
+            tempSensorAvail:
+                label: Connected
+                type: boolean
+                renderer: Zenoss.render.checkbox
+                order: 2
+                datapoint: tempSensorAvail_tempSensorAvail
+            tempSensorTempC:
+                label: Temperature
+                short_label: Temp
+                order: 3
+                datapoint: tempSensorTempC_tempSensorTempC
 
 
 class_relationships:
-    #- GeistDevice(geistClimateSensors) 1:MC (geist)GeistClimateSensor
-    - GeistMonitorDevice 1:MC GeistClimateSensor
+    - GeistMonitorDevice(geistClimateSensors) 1:MC (geistMonitorDevice)GeistClimateSensor
 
 device_classes:
     /Environment/Geist:
@@ -55,33 +86,81 @@ device_classes:
         templates:
             ClimateSensor:
                 targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistClimateSensor
-                description: Geist Climate Sensor monitoring.
+                description: Climate sensors (internal sensors for RacSense units)
 
                 datasources:
-                    temperature:
+                    climateAvail:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.4
+                        component: "${here/id}"
+                        datapoints:
+                            climateAvail:
+                                rrdtype: GAUGE
+                                description: Is device currently plugged in?
+                    climateTempC:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.5
                         component: "${here/id}"
                         datapoints:
-                            temperature: GAUGE
-                    io1:
+                            climateTempC:
+                                rrdtype: GAUGE
+                                description: Current reading for Temperature (C)
+                    climateHumidity:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.6
+                        component: "${here/id}"
+                        datapoints:
+                            climateHumidity:
+                                rrdtype: GAUGE
+                                description: Current reading for Humidity
+                    climateAirflow:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.7
+                        component: "${here/id}"
+                        datapoints:
+                            climateAirflow:
+                                rrdtype: GAUGE
+                                description: Current reading for Airflow
+                    climateLight:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.8
+                        component: "${here/id}"
+                        datapoints:
+                            climateLight:
+                                rrdtype: GAUGE
+                                description: Current reading for Ambient Light
+                    climateSound:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.2.1.9
+                        component: "${here/id}"
+                        datapoints:
+                            climateSound:
+                                rrdtype: GAUGE
+                                description: Current reading for Sound
+                    climateIO1:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.10
                         component: "${here/id}"
                         datapoints:
-                            io1: GAUGE
-                    io2:
+                            climateIO1:
+                                rrdtype: GAUGE
+                                description: Current reading for Analog Input 1
+                    climateIO2:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.11
                         component: "${here/id}"
                         datapoints:
-                            io2: GAUGE
-                    io3:
+                            climateIO2:
+                                rrdtype: GAUGE
+                                description: Current reading for Analog Input 2
+                    climateIO3:
                         type: SNMP
                         oid: 1.3.6.1.4.1.21239.1.2.1.12
                         component: "${here/id}"
                         datapoints:
-                            io3: GAUGE
+                            climateIO3:
+                                rrdtype: GAUGE
+                                description: Current reading for Analog Input 3
 
                 graphs:
                     Temperature:
@@ -90,7 +169,7 @@ device_classes:
                         width: 500
                         graphpoints:
                             Temperature:
-                                dpName: temperature_temperature
+                                dpName: climateTempC_climateTempC
                                 format: "%6.2lf°C"
 
                     IO Ports:
@@ -98,11 +177,11 @@ device_classes:
                         width: 500
                         graphpoints:
                             IO1:
-                                dpName: io1_io1
-                                format: "%5.2lf"
+                                dpName: climateIO1_climateIO1
+                                format: "%6.2lf"
                             IO2:
-                                dpName: io2_io2
-                                format: "%5.2lf"
+                                dpName: climateIO2_climateIO2
+                                format: "%6.2lf"
                             IO3:
-                                dpName: io3_io3
-                                format: "%5.2lf"
+                                dpName: climateIO3_climateIO3
+                                format: "%6.2lf"

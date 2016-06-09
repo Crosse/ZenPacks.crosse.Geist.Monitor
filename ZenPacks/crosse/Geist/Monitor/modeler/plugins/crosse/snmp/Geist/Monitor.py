@@ -1,14 +1,18 @@
+from Products.DataCollector.plugins.DataMaps import MultiArgs, RelationshipMap, ObjectMap
 from Products.DataCollector.plugins.CollectorPlugin import (
         SnmpPlugin, GetTableMap, GetMap,
         )
 
 
 class Monitor(SnmpPlugin):
-    relname = 'geistClimateSensors'
-    modname = 'ZenPacks.crosse.Geist.Monitor.GeistClimateSensor'
-
     snmpGetMap = (
             GetMap({
+                '.1.3.6.1.4.1.21239.1.1.1.0': 'productTitle',
+                '.1.3.6.1.4.1.21239.1.1.2.0': 'productVersion',
+                '.1.3.6.1.4.1.21239.1.1.3.0': 'productFriendlyName',
+                '.1.3.6.1.4.1.21239.1.1.5.0': 'productUrl',
+                '.1.3.6.1.4.1.21239.1.1.7.0': 'productHardware',
+                # The rest are solely used to get the total sensor count.
                 '.1.3.6.1.4.1.21239.1.1.8.1.2.0': 'climateCount',
                 '.1.3.6.1.4.1.21239.1.1.8.1.3.0': 'powerMonitorCount',
                 '.1.3.6.1.4.1.21239.1.1.8.1.4.0': 'tempSensorCount',
@@ -40,41 +44,53 @@ class Monitor(SnmpPlugin):
     snmpGetTableMaps = (
             GetTableMap(
                 'climateTable', '1.3.6.1.4.1.21239.1.2.1', {
-                    '.1':  'climateIndex',
-                    '.2':  'climateSerial',
-                    '.3':  'climateName',
-                    '.4':  'climateAvail',
-                    '.5':  'climateTempC',
-                    '.10': 'climateIO1',
-                    '.11': 'climateIO2',
-                    '.12': 'climateIO3',
+                    '.2': 'climateSerial',
+                    '.3': 'climateName',
+                    '.4': 'climateAvail',
                     }
                 ),
             )
 
     def process(self, device, results, log):
-        sensor_count = sum([x for x in results[0].values()])
-        climate_sensors = results[1].get('climateTable', {})
+        log.info('Modeler %s processing data for device %s',
+                self.name(), device.id)
 
-        rm = self.relMap()
-        for snmpindex, row in climate_sensors.items():
+        getdata, tabledata = results
+        sensor_count = sum([getdata[x] for x in getdata if 'Count' in x])
+
+        maps = []
+
+        # device-specific data
+        manufacturer = 'Geist Manufacturing, Inc.'
+        os_name = '%s %s' % (getdata['productTitle'], getdata['productVersion'])
+        maps.append(ObjectMap(data={
+            'sensor_count': sensor_count,
+            'title': getdata['productFriendlyName'],
+            'setHWProductKey': MultiArgs(getdata['productHardware'], manufacturer),
+            'setOSProductKey': MultiArgs(os_name, manufacturer),
+            }))
+
+        # Components: climate sensors
+        rm = RelationshipMap(
+                relname='geistClimateSensors',
+                modname='ZenPacks.crosse.Geist.Monitor.GeistClimateSensor',
+                )
+        for snmpindex, row in tabledata.get('climateTable', {}).items():
             serial = row.get('climateSerial')
             if not serial:
                 log.warn('Skipping climate sensor with no serial')
                 continue
+            log.debug('Modeling climate sensor %s', serial)
             
-            rm.append(self.objectMap({
-                'id': self.prepId(serial),
-                'title': row.get('climateName'),
-                'snmpindex': snmpindex.strip('.'),
-                'serial': serial,
-                'temperature': row.get('climateTempC'),
-                'ioPort1': row.get('climateIO1'),
-                'ioPort2': row.get('climateIO2'),
-                'ioPort3': row.get('climateIO3'),
-                }))
+            values = {k: row[k] for k in row}
+            values['id'] = self.prepId(serial)
+            values['title'] = values['climateName']
+            values['snmpindex'] = snmpindex.strip('.')
 
-        om = self.objectMap({
-            'sensor_count': sensor_count,
-            })
-        return [om, rm]
+            rm.append(ObjectMap(
+                modname='ZenPacks.crosse.Geist.Monitor.GeistClimateSensor',
+                data=values
+                ))
+        maps.append(rm)
+
+        return maps
