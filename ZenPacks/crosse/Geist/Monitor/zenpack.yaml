@@ -72,10 +72,35 @@ classes:
                 order: 3
                 datapoint: tempSensorTempC_tempSensorTempC
 
+    GeistAirflowSensor:
+        base: [zenpacklib.Component]
+        label: Airflow Sensor
+        properties:
+            DEFAULTS:
+                type: int
+
+            tempSensorSerial:
+                label: Serial Number
+                type: string
+                content_width: 110
+                order: 1
+            tempSensorAvail:
+                label: Connected
+                type: boolean
+                renderer: Zenoss.render.checkbox
+                order: 2
+                datapoint: airFlowSensorAvail_airFlowSensorAvail
+            tempSensorTempC:
+                label: Temperature
+                short_label: Temp
+                order: 3
+                datapoint: airFlowSensorTempC_airFlowSensorTempC
+
 
 class_relationships:
     - GeistMonitorDevice(geistClimateSensors) 1:MC (geistMonitorDevice)GeistClimateSensor
     - GeistMonitorDevice(geistTemperatureSensors) 1:MC (geistMonitorDevice)GeistTemperatureSensor
+    - GeistMonitorDevice(geistAirflowSensors) 1:MC (geistMonitorDevice)GeistAirflowSensor
 
 device_classes:
     /Environment/Geist:
@@ -232,3 +257,63 @@ device_classes:
                                 dpName: tempSensorTempC_tempSensorTempC
                                 format: "%6.2lf°C"
 
+
+            AirflowSensor:
+                targetPythonClass: ZenPacks.crosse.Geist.Monitor.GeistAirflowSensor
+                description: Airflow Sensors
+
+                datasources:
+                    airFlowSensorAvail:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.5.1.4
+                        component: "${here/id}"
+                        datapoints:
+                            airFlowSensorAvail:
+                                rrdtype: GAUGE
+                                description: Is device currently plugged in?
+                    airFlowSensorFlow:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.5.1.5
+                        datapoints:
+                            airFlowSensorFlow:
+                                rrdtype: GAUGE
+                                description: Air flow reading
+                    airFlowSensorTempC:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.6.1.5
+                        datapoints:
+                            airFlowSensorTempC:
+                                rrdtype: GAUGE
+                                description: Temperature in Celsius
+                    airFlowSensorHumidity:
+                        type: SNMP
+                        oid: 1.3.6.1.4.1.21239.1.7.1.5
+                        datapoints:
+                            airFlowSensorHumidity:
+                                rrdtype: GAUGE
+                                description: Humidity reading
+
+                graphs:
+                    Temperature:
+                        units: degrees Celsius
+                        height: 100
+                        width: 500
+                        graphpoints:
+                            Temperature:
+                                dpName: airFlowSensorTempC_airFlowSensorTempC
+                                format: "%6.2lf°C"
+                    Airflow:
+                        height: 100
+                        width: 500
+                        graphpoints:
+                            Airflow:
+                                dpName: airFlowSensorFlow_airFlowSensorFlow
+                                format: "%6.2lf"
+                    Humidity:
+                        units: percent
+                        height: 100
+                        width: 500
+                        graphpoints:
+                            Humidity:
+                                dpName: airFlowSensorHumidity_airFlowSensorHumidity
+                                format: "%6.2lf"

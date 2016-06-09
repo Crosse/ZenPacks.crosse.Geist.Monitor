@@ -56,6 +56,13 @@ class Monitor(SnmpPlugin):
                     '.4': 'tempSensorAvail',
                     }
                 ),
+            GetTableMap(
+                'airFlowSensorTable', '1.3.6.1.4.1.21239.1.5.1', {
+                    '.2': 'airFlowSensorSerial',
+                    '.3': 'airFlowSensorName',
+                    '.4': 'airFlowSensorAvail',
+                    }
+                ),
             )
 
     def process(self, device, results, log):
@@ -122,5 +129,29 @@ class Monitor(SnmpPlugin):
                 data=values
                 ))
         maps.append(rm)
+
+        # Components: airflow sensors
+        rm = RelationshipMap(
+                relname='geistAirflowSensors',
+                modname='ZenPacks.crosse.Geist.Monitor.GeistAirflowSensor',
+                )
+        for snmpindex, row in tabledata.get('airFlowSensorTable', {}).items():
+            serial = row.get('airFlowSensorSerial')
+            if not serial:
+                log.warn('Skipping airflow sensor with no serial')
+                continue
+            log.debug('Modeling airflow sensor %s', serial)
+            
+            values = {k: row[k] for k in row}
+            values['id'] = self.prepId(serial)
+            values['title'] = values['airFlowSensorName']
+            values['snmpindex'] = snmpindex.strip('.')
+
+            rm.append(ObjectMap(
+                modname='ZenPacks.crosse.Geist.Monitor.GeistAirflowSensor',
+                data=values
+                ))
+        maps.append(rm)
+        import pdb; pdb.set_trace()
 
         return maps
